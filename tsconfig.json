@@ -20,8 +20,9 @@
       "@assets/*": ["assets/*"],
       "@layouts/*": ["layouts/*"],
       "@customTypes/*": ["types/*"],
+      "@data/*":["data/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/data/footerItems.json"],
   "exclude": ["node_modules"]
 }

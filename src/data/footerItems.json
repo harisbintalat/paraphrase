@@ -1,0 +1,42 @@
+[
+    {
+        "id":0,
+        "href":"/",
+        "item":"Home"
+    },
+    {
+        "id":1,
+        "href":"/sell",
+        "item":"Sell"
+    },
+    {
+        "id":2,
+        "href":"/buy",
+        "item":"Buy"
+    },
+    {
+        "id":3,
+        "href":"/learn",
+        "item":"Learn"
+    },
+    {
+        "id":4,
+        "href":"/contact",
+        "item":"Contact"
+    },
+    {
+        "id":5,
+        "href":"/terms",
+        "item":"Terms and Conditions"
+    },
+    {
+        "id":6,
+        "href":"/privacy",
+        "item":"Privacy Policy"
+    },
+    {
+        "id":7,
+        "href":"/sitemap",
+        "item":"Site Map"
+    }
+]
