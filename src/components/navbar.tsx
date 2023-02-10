@@ -18,7 +18,7 @@ export default function Home() {
   }, [router]);
 
   return (
-    <div className="md:fixed left-0 top-0 right-0">
+    <div>
       <nav className="w-full bg-black shadow">
         <div className="justify-end px-4 mx-auto lg:max-w-7xl md:items-center md:flex md:px-8">
           <div className="py-2">

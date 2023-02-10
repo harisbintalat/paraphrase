@@ -1,14 +1,40 @@
+import React from "react";
 import Head from "next/head";
+import Image from "next/image";
 import { NextPageWithLayout } from "@customTypes/layouts";
-import { ReactElement, useState } from "react";
+import copyIcon from "@assets/imgs/copy-icon.png";
+import spinner from "@assets/imgs/spinner.svg";
 import ClientLayout from "@layouts/clientLayout";
+import axios from "axios";
+import { API_URL } from "api";
 
 const Home: NextPageWithLayout = () => {
-  const [data, setData] = useState("");
+  const [data, setData] = React.useState<string>("");
+  const [paraphrase, setParaphrase] = React.useState<string>("");
+  const [IsLoading, setIsLoading] = React.useState<boolean>(false);
+  const [isCopied, setIsCopied] = React.useState<string>("Copy");
 
-  const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setData(event.target.value);
+  };
+
+  const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    alert(data);
+    await axios.post(API_URL + "/", { text: data }).then((response) => {
+      if (response.status == 200) {
+        setParaphrase(response.data.paraphrased_text);
+        setIsLoading(false);
+      }
+    });
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(paraphrase);
+    setIsCopied("Copied!");
+  };
+
+  const handleClickOutside = () => {
+    setIsCopied("Copy");
   };
 
   return (
@@ -19,37 +45,59 @@ const Home: NextPageWithLayout = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <form onSubmit={handleSubmit} className="mb-8">
-        <div className="m-5 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <textarea
-              placeholder="Paste here to rephrase"
-              onChange={(event) => {
-                setData(event.target.value);
-              }}
-              className="w-full px-2 py-2 border-2 shadow-lg rounded-lg"
-              rows={16}
-            />
+      <div onClick={handleClickOutside}>
+        <form onSubmit={handleSubmit} className="mb-8">
+          <div className="m-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <textarea
+                placeholder="Paste here to rephrase"
+                value={data}
+                onChange={handleChange}
+                className="w-full px-2 py-2 border-2 shadow-lg rounded-lg"
+                rows={16}
+              />
+            </div>
+            <div className="relative">
+              <textarea
+                placeholder="Rephrased text"
+                value={paraphrase}
+                onChange={(event) => {
+                  setParaphrase(event.target.value);
+                }}
+                className="w-full px-2 py-2 border-2 shadow-lg rounded-lg"
+                rows={16}
+              />
+            </div>
           </div>
-          <div>
-            <textarea
-              placeholder="Rephrased text"
-              className="w-full px-2 py-2 border-2 shadow-lg rounded-lg"
-              rows={16}
-            />
+          <div className="grid justify-center">
+            <button
+              disabled={data.length <= 0 }
+              className={`${
+                IsLoading ? "bg-white" : "bg-yellow-500"
+              } flex justify-center items-center rounded-xl w-40 md:w-80 font-semibold shadow-xl p-3`}
+              onClick={() => setIsLoading(true)}
+            >
+              {IsLoading ? (
+                <Image src={spinner} alt="" width={30} />
+              ) : (
+                "Rephrase"
+              )}
+            </button>
           </div>
-        </div>
-        <div className="grid justify-center">
-          <button className="bg-green-600 rounded-xl w-40 text-white p-3">
-            Rephrase
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
+      <button
+        className="absolute flex right-12 top-4 md:top-8 bg-yellow-500 w-18 p-2 rounded-md"
+        onClick={handleCopy}
+      >
+        <Image src={copyIcon} width={15} alt="" className="m-1" />
+        {isCopied}
+      </button>
     </>
   );
 };
 
-Home.getLayout = (page: ReactElement) => {
+Home.getLayout = (page: React.ReactElement) => {
   return <ClientLayout>{page}</ClientLayout>;
 };
 

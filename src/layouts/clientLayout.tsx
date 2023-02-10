@@ -6,9 +6,9 @@ import Footer from '@components/footer'
 const ClientLayout : React.FC <IClientLayout> = ({children}) => {
   return (
     <>
-      <Navbar />
-      <div className='mt-32'>{children}</div> 
-      <Footer />
+      {/* <Navbar /> */}
+      <div className='mt-20'>{children}</div> 
+      {/* <Footer /> */}
     </>
   )  
 } 
